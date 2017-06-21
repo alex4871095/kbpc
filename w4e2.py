@@ -65,8 +65,9 @@ dict['model'] = list[y-2]
 y = list.index('Version')
 dict['os_version'] = list[y+1]
 y = list.index('uptime')
+z = list.index('returned')
 s = ' '
-dict['uptime'] = s.join(list[y+2:y+10])
+dict['uptime'] = s.join(list[y+2:z-1])
 y = list.index('SN')
 dict['serial_number'] = list[y+4]
 
