@@ -7,7 +7,7 @@ if len(splitted_net) == 4:
 	o3 = int(splitted_net[2])
 	o4 = int(splitted_net[3])
         if o1 > 0 and o1 < 224 and o1 != 127:
-		if o3 > 0 and o3 < 255 and o4 > 0 and o4 < 255:
+		if o3 >= 0 and o3 <= 255 and o4 >= 0 and o4 <= 255:
                 	if o1 == 169 and o2 == 254:
 				f = 1
 			else:
