@@ -11,5 +11,5 @@ def dec_to_bin_func( ip_addr ):
 	s = '.'
 	return s.join(binary)
 
-print dec_to_bin_func('192.168.189.174')
+#print dec_to_bin_func('192.168.189.174')
 

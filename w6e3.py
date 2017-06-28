@@ -29,7 +29,7 @@ def validate_ip_func( net ):
         	return False
 
 
-print validate_ip_func(net)
+#print validate_ip_func(net)
 
 #>>> import w6e3
 #False
