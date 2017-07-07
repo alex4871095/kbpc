@@ -23,26 +23,14 @@ class Uptime(object):
 
 	def uptime_seconds(self):
 		sec = 0
-		try:
-			if self.years:
-				sec += int(self.years)*31536000
-                except AttributeError:
-                        pass
-		try:
-                	if self.weeks:
-                        	sec += int(self.weeks)*604800
-                except AttributeError:
-                        pass
-		try:
-                	if self.days:
-                        	sec += int(self.days)*86400
-                except AttributeError:
-                        pass
-		try:
-                	if self.hours:
-                        	sec += int(self.hours)*3600
-                except AttributeError:
-                        pass
+		if hasattr(self, 'years'):
+			sec += int(self.years)*31536000
+                if hasattr(self, 'weeks'):
+                        sec += int(self.weeks)*604800
+                if hasattr(self, 'days'):
+                        sec += int(self.days)*86400
+                if hasattr(self, 'hours'):
+                        sec += int(self.hours)*3600
                 sec += int(self.minutes)*60
 		return sec 
 
@@ -53,27 +41,23 @@ def main():
 	for i in list:
 		print i
 		uptime = Uptime(i)
-		try:
-			if uptime.years:
-				print "uptime.years =", uptime.years
-		except AttributeError:
-			pass
-		try:
-			if uptime.weeks:
-                		print "uptime.weeks =", uptime.weeks
-                except AttributeError:
-                        pass
-		try:
-			if uptime.days:
-                		print "uptime.days =", uptime.days
-                except AttributeError:
-                        pass
-		try:
-			if uptime.hours:
-                		print "uptime.hours =", uptime.hours
-                except AttributeError:
-                        pass
-        	print "uptime.minutes =", uptime.minutes
+
+		#try:
+		#	if uptime.years:
+		#		print "uptime.years =", uptime.years
+		#except AttributeError:
+		#	pass
+
+		if hasattr(uptime, 'years'):
+			print "uptime.years =", uptime.years
+		if hasattr(uptime, 'weeks'):
+                	print "uptime.weeks =", uptime.weeks
+		if hasattr(uptime, 'days'):
+                	print "uptime.days =", uptime.days
+		if hasattr(uptime, 'hours'):
+                	print "uptime.hours =", uptime.hours
+        	
+		print "uptime.minutes =", uptime.minutes
 		
 		print "uptime in seconds = ", uptime.uptime_seconds()
 
