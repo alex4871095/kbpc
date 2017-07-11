@@ -19,9 +19,9 @@ class NetworkObject(object):
 
 def main():
 
-        ip = ['213.140.243.131']
-        username = 'cisco_tech'
-        password = 'rjkktrnjh2014'
+        ip = ['192.168.0.1']
+        username = 'cisco'
+        password = 'password'
         method = 'telnet'
         command = 'show version'
 

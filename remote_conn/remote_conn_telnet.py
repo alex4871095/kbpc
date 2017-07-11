@@ -37,9 +37,9 @@ def telnet_connection(ip, username, password, commands):
 
 def main():
 
-        ip = '213.140.243.131'
-        username = 'cisco_tech'
-        password = 'rjkktrnjh2014'
+        ip = '192.168.0.1'
+        username = 'cisco'
+        password = 'password'
         commands = 'show ip cef summary,show version'
 
         print telnet_connection(ip, username, password, commands)
