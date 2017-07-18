@@ -5,37 +5,44 @@ from remote_conn_telnet import telnet_connection
 from remote_conn_ssh import ssh_connection
 from scale_parser import parser
 
+hosts = '''192.168.0.1
+192.168.0.2
+192.168.0.3
+'''
 
 class NetworkObject(object):
-	def __init__(self, parsed_dict):
-		self.ip = parsed_dict['ip']
-		self.hostname = parsed_dict['hostname']
-		#self.vendor = parsed_dict['vendor']
-		#self.model = parsed_dict['model']
-		#self.os_version = parsed_dict['os_version']
-		#self.serial_number = parsed_dict['serial_number']
-		#self.uptime = parsed_dict['uptime']
-		self.prefixes = parsed_dict['cef_prefixes']
-		self.tcam_v4_q = parsed_dict['tcam_v4_q']
-		self.tcam_v4_p = parsed_dict['tcam_v4_p']
-		self.tcam_v6_q = parsed_dict['tcam_v6_q']
-		self.tcam_v6_p = parsed_dict['tcam_v6_p']
+	def __init__(self, parsed_data):
+		self.ip = parsed_data['ip']
+		self.hostname = parsed_data['hostname']
+		#self.vendor = parsed_data['vendor']
+		#self.model = parsed_data['model']
+		#self.os_version = parsed_data['os_version']
+		#self.serial_number = parsed_data['serial_number']
+		#self.uptime = parsed_data['uptime']
+		self.grt_prefixes = parsed_data['cef_prefixes']
+		self.tcam_v4_q = parsed_data['tcam_v4_q']
+		self.tcam_v4_p = parsed_data['tcam_v4_p']
+		self.tcam_v6_q = parsed_data['tcam_v6_q']
+		self.tcam_v6_p = parsed_data['tcam_v6_p']
+		self.bgp_ipv4 = parsed_data['bgp_ipv4']
+		self.bgp_vpnv4 = parsed_data['bgp_vpnv4']
 
 
 def main():
 
-	ip = ['192.168.0.1', '192.168.0.2', '192.168.0.3']
+#	tmp = '''
+	ip = hosts.split('\n')
         username = 'cisco'
-        password = 'password'
+        password = ''
         method = 'telnet'
-        command = 'show ip cef summary,show platform hardware capacity forwarding'
+        command = 'show ip cef summary,show platform hardware capacity forwarding,show bgp ipv4 unicast summary,show bgp vpnv4 unicast all summary'
 
 	f = open('collected_data.txt', 'wb')
 
 	for dev in ip:
         	if method == 'telnet':
         		response_string = telnet_connection(dev, username, password, command)
-        	else:
+        	elif method == 'ssh':
         		response_string = ssh_connection(dev, username, password, command)
 
                 parsed_data = parser(dev, response_string)
@@ -46,21 +53,19 @@ def main():
 			pickle.dump(network_object, f)
 		except KeyError:
 			pass
+			#print "Pickling error"
         
 	f.close()		
+#	'''
+
+	print "%-20s %-20s %-15s %-15s %-15s %-17s %-17s %-17s %-17s" % ("Hostname", "IP", "CEF GRT pfx", "BGP ipv4 pfx", "BGP vpnv4 pfx", "TCAM v4 usage", "TCAM v4 usage(%)", "TCAM v6 usage", "TCAM v6 usage(%)") 
 
 	with open('collected_data.txt', 'rb') as f:
 		while True:
 			try:
                 		network_object = pickle.load(f)
-	       			print "Hostname         ", network_object.hostname
-        			print "IP               ", network_object.ip
-        			print "CEF prefixes     ", network_object.prefixes
-				print "TCAM v4 usage    ", network_object.tcam_v4_q
-        			print "TCAM v4 usage(%) ", network_object.tcam_v4_p
-        			print "TCAM v6 usage    ", network_object.tcam_v6_q
-        			print "TCAM v6 usage(%) ", network_object.tcam_v6_p
-				print "\n"
+        			print "%-20s %-20s %-15s %-15s %-15s %-17s %-17s %-17s %-17s" % (network_object.hostname, network_object.ip, network_object.grt_prefixes, network_object.bgp_ipv4, network_object.bgp_vpnv4, network_object.tcam_v4_q, network_object.tcam_v4_p, network_object.tcam_v6_q, network_object.tcam_v6_p)
+
 			except EOFError:
 				break
 

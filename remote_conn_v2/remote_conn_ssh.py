@@ -19,7 +19,7 @@ def ssh_connection(ip, username, password, commands):
 
         for command in commands_list:
                 remote_conn.send(command + "\n")
-                time.sleep(1)
+                time.sleep(2)
                 output = remote_conn.recv(65535)
                 RESPONSE = RESPONSE + output
 
@@ -28,10 +28,10 @@ def ssh_connection(ip, username, password, commands):
 
 def main():
 
-        ip = '213.140.243.131'
-        username = 'cisco_tech'
-        password = 'rjkktrnjh2014'
-        commands = 'show ip cef summary,show version'
+        ip = '192.168.0.1'
+        username = 'cisco'
+        password = ''
+        commands = 'show ip cef summary,show platform hardware capacity forwarding'
 
         print ssh_connection(ip, username, password, commands)
 

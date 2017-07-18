@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 import re
 
@@ -30,7 +30,20 @@ def parser (ip, response_string):
 		tcam_v6_p = tcam_v6_p.rstrip('\r')
 		network_device['tcam_v6_p'] = tcam_v6_p
 
-        return network_device
+        bgp_ipv4 = re.search(r"show bgp ipv4 unicast summary\r\n(.+)\r\n(.+)\r\n(\d+?) network entries", response_string)
+        if bgp_ipv4:
+                network_device['bgp_ipv4'] = bgp_ipv4.group(3)
+	else:
+		network_device['bgp_ipv4'] = ""
+
+        bgp_vpnv4 = re.search(r"show bgp vpnv4 unicast all summary\r\n(.+)\r\n(.+)\r\n(\d+?) network entries", response_string)
+        if bgp_vpnv4:
+                network_device['bgp_vpnv4'] = bgp_vpnv4.group(3)
+	else:
+		network_device['bgp_vpnv4'] = ""
+
+	#print network_device
+	return network_device
 
 def main():
 

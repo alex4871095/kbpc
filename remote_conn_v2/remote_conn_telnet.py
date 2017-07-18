@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 import time
 import socket
@@ -12,7 +12,7 @@ def telnet_connection(ip, username, password, commands):
 
 	try:
         	remote_conn = telnetlib.Telnet(ip, TELNET_PORT, TELNET_TIMEOUT)
-        
+       		
 		output = remote_conn.read_until("sername:", READ_TIMEOUT)
         	remote_conn.write(username + "\n")
 
@@ -26,30 +26,33 @@ def telnet_connection(ip, username, password, commands):
         	time.sleep(1)
         	output = remote_conn.read_very_eager()
 
+                print ip, "connection successful"
+
         	commands_list = commands.split(",")
 
         	for command in commands_list:
                 	remote_conn.write(command + "\n")
-                	time.sleep(1)
+                	time.sleep(2)
                 	output = remote_conn.read_very_eager()
                 	RESPONSE = RESPONSE + output
 
         	remote_conn.close()
 
         except socket.error:
-                print ip, " connection problem"
+                print ip, "connection problem"
 
-
+	#print RESPONSE
         return RESPONSE
 
 def main():
 
         ip = '192.168.0.1'
         username = 'cisco'
-        password = 'password'
-        commands = 'show ip cef summary | incl prefixes,show platform hardware capacity forwarding | incl bits'
+        password = ''
+        command = 'show ip cef summary,show platform hardware capacity forwarding,show bgp ipv4 unicast summary,show bgp vpnv4 unicast all summary'
 
-        print telnet_connection(ip, username, password, commands)
+	with open('show_scale.txt', 'wb') as f:
+        	f.write(telnet_connection(ip, username, password, command))
 
 
 if __name__ == "__main__":
