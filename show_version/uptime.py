@@ -9,9 +9,9 @@ def obtain_uptime( data_string ):
                 return None
 
 def main():
-        with open("../show_version.txt") as show_ver_file:
+        with open("../data/show_version.txt") as show_ver_file:
                 show_ver = show_ver_file.read()
-        print obtain_uptime(show_ver)
+        print (obtain_uptime(show_ver))
 
 if __name__ == '__main__':
         main()
